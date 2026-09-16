@@ -1,0 +1,166 @@
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.alert .retry {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------- previews */
+.previews {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.preview {
+  position: relative;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.preview img {
+  display: block;
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  background: var(--surface-muted);
+}
+
+.preview figcaption {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+}
+
+.preview-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status.ok {
+  color: var(--success);
+}
+
+.status.bad {
+  color: var(--danger);
+}
+
+.preview.is-error {
+  border-color: #fecaca;
+}
+
+.preview.is-success {
+  border-color: #bbf7d0;
+}
+
+.preview.is-uploading {
+  opacity: 0.75;
+}
+
+.remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  padding: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.62);
+  color: #fff;
+  cursor: pointer;
+}
+
+.upload-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* ----------------------------------------------------------------- viewer */
+.viewer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.viewer-name {
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------- grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.thumb {
+  display: grid;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+}
+
+.thumb:hover {
+  border-color: var(--primary);
+}
+
+.thumb.is-selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(59, 91, 219, 0.2);
+}
+
+.thumb img {
+  display: block;
+  width: 100%;
+  height: 104px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--surface-muted);
+}
+
+.thumb-name {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .thumb img {
+    height: 88px;
+  }
+}

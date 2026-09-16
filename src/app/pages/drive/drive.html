@@ -1,0 +1,214 @@
+<div class="page">
+  <app-page-header title="Files & folders" subtitle="Create folders, upload files into them and manage the tree.">
+    @if (canManage()) {
+      <app-ui-button variant="secondary" (click)="openCreateFolder()">
+        <svg lucideFolderPlus size="16"></svg>
+        New folder
+      </app-ui-button>
+    }
+  </app-page-header>
+
+  @if (!canManage()) {
+    <div class="alert alert-info">Your role can browse files but cannot upload, rename or delete them.</div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-error" role="alert">
+      <span>{{ errorMessage() }}</span>
+      <button type="button" class="retry" (click)="reload()">Retry</button>
+    </div>
+  }
+
+  <section class="card">
+    <div class="card-body toolbar">
+      <nav class="crumbs" aria-label="Folder path">
+        <button type="button" class="crumb" (click)="navigateTo('root')">
+          <svg lucideHouse size="15"></svg>
+          <span>My files</span>
+        </button>
+
+        @for (crumb of breadcrumbs(); track crumb.id) {
+          <svg lucideChevronRight size="14" class="crumb-sep" aria-hidden="true"></svg>
+          <button type="button" class="crumb" (click)="navigateTo(crumb.id)">{{ crumb.name }}</button>
+        }
+      </nav>
+
+      <div class="toolbar-end">
+        <app-search-input
+          placeholder="Search all files and folders…"
+          [value]="location().search"
+          (search)="onSearch($event)"
+        />
+      </div>
+    </div>
+
+    @if (isSearchResult()) {
+      <p class="search-note">
+        Showing matches from every folder.
+        <button type="button" class="link" (click)="navigateTo(location().parentId)">Back to folder</button>
+      </p>
+    }
+
+    @if (loading()) {
+      <app-loader label="Loading folder…" />
+    } @else if (!items().length) {
+      <app-empty-state
+        [title]="isSearchResult() ? 'No matches found' : 'This folder is empty'"
+        [message]="
+          isSearchResult()
+            ? 'Try a different name.'
+            : canManage()
+              ? 'Create a folder or drop files below to get started.'
+              : 'Nothing has been added here yet.'
+        "
+      >
+        <svg lucideFolder size="30" emptyIcon></svg>
+      </app-empty-state>
+    } @else {
+      <ul class="listing">
+        @for (node of items(); track node.id) {
+          <li class="node" [class.is-folder]="node.type === 'folder'">
+            <button
+              type="button"
+              class="node-main"
+              (click)="node.type === 'folder' ? openFolder(node) : openPreview(node)"
+            >
+              <span class="node-icon" aria-hidden="true">
+                @if (node.type === 'folder') {
+                  <svg lucideFolder size="20"></svg>
+                } @else {
+                  <svg lucideFile size="20"></svg>
+                }
+              </span>
+
+              <span class="node-text">
+                <span class="node-name truncate">{{ node.name }}</span>
+                <span class="muted text-sm">
+                  @if (node.type === 'folder') {
+                    Folder
+                  } @else {
+                    {{ node.size | fileSize }} · {{ node.mimeType }}
+                  }
+                </span>
+              </span>
+            </button>
+
+            <div class="node-actions">
+              @if (node.type === 'file') {
+                <app-ui-button variant="ghost" size="sm" (click)="openPreview(node)">
+                  <svg lucideEye size="15"></svg>
+                  <span class="visually-hidden">View {{ node.name }}</span>
+                </app-ui-button>
+              }
+
+              @if (canManage()) {
+                <app-ui-button variant="ghost" size="sm" (click)="openRename(node)">
+                  <svg lucidePencil size="15"></svg>
+                  <span class="visually-hidden">Rename {{ node.name }}</span>
+                </app-ui-button>
+
+                <app-ui-button variant="ghost" size="sm" (click)="confirmDelete(node)">
+                  <svg lucideTrash size="15" class="danger"></svg>
+                  <span class="visually-hidden">Delete {{ node.name }}</span>
+                </app-ui-button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+
+      <p class="listing-summary muted text-sm">
+        {{ folders().length }} folder(s) · {{ files().length }} file(s)
+      </p>
+    }
+  </section>
+
+  @if (canManage() && !isSearchResult()) {
+    <section class="card">
+      <div class="card-body">
+        <app-file-drop-zone
+          title="Drop files into this folder"
+          [hint]="'Images, PDF, text, CSV or JSON · up to ' + maxUploadMb + ' MB each'"
+          [accept]="acceptedTypes"
+          [disabled]="uploading()"
+          (filesSelected)="onFilesSelected($event)"
+        />
+
+        @if (uploading()) {
+          <app-loader label="Uploading files…" />
+        }
+      </div>
+    </section>
+  }
+</div>
+
+@if (nameDialog(); as dialog) {
+  <app-modal
+    [title]="dialog.mode === 'create' ? 'New folder' : 'Rename item'"
+    size="sm"
+    [busy]="savingName()"
+    (closed)="closeNameDialog()"
+  >
+    <div class="field">
+      <label for="node-name">Name</label>
+      <input
+        id="node-name"
+        class="input"
+        type="text"
+        autocomplete="off"
+        [value]="nameValue()"
+        [class.is-invalid]="!!nameError()"
+        (input)="nameValue.set($any($event.target).value)"
+        (keyup.enter)="submitName()"
+      />
+      @if (nameError()) {
+        <p class="field-error">{{ nameError() }}</p>
+      }
+    </div>
+
+    <div modalFooter>
+      <app-ui-button variant="secondary" [disabled]="savingName()" (click)="closeNameDialog()">Cancel</app-ui-button>
+      <app-ui-button [loading]="savingName()" (click)="submitName()">
+        {{ dialog.mode === 'create' ? 'Create folder' : 'Save name' }}
+      </app-ui-button>
+    </div>
+  </app-modal>
+}
+
+@if (preview(); as node) {
+  <app-modal [title]="node.name" size="lg" (closed)="preview.set(null)">
+    @if (isImage(node)) {
+      <img class="preview-image" [src]="node.dataUrl" [alt]="node.name" />
+    } @else {
+      <div class="preview-file">
+        <svg lucideFile size="34"></svg>
+        <p>{{ node.mimeType }} · {{ node.size | fileSize }}</p>
+        <p class="muted text-sm">This file type cannot be previewed in the browser.</p>
+      </div>
+    }
+
+    <div class="preview-meta">
+      <app-badge tone="neutral">{{ node.mimeType }}</app-badge>
+      <app-badge tone="primary">{{ node.size | fileSize }}</app-badge>
+    </div>
+
+    <div modalFooter>
+      <a class="download" [href]="node.dataUrl" [download]="node.name">
+        <svg lucideDownload size="15"></svg>
+        Download
+      </a>
+      <app-ui-button variant="secondary" (click)="preview.set(null)">Close</app-ui-button>
+    </div>
+  </app-modal>
+}
+
+@if (pendingDelete(); as node) {
+  <app-confirm-dialog
+    [title]="node.type === 'folder' ? 'Delete folder' : 'Delete file'"
+    [message]="deleteMessage(node)"
+    confirmLabel="Delete"
+    [loading]="deleting()"
+    (confirmed)="deleteNode()"
+    (cancelled)="pendingDelete.set(null)"
+  />
+}

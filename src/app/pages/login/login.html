@@ -1,0 +1,104 @@
+<div class="login">
+  <section class="intro">
+    <span class="brand-mark">MT</span>
+    <h1>Machine Test Console</h1>
+    <p>
+      An Angular admin built for the beginner machine test: authentication, role based access, user management,
+      image handling and a Drive style file browser — all against a json-server mock API.
+    </p>
+
+    <ul class="highlights">
+      <li>Route guards and an HTTP interceptor for tokens</li>
+      <li>Server-side search, filters and pagination</li>
+      <li>Multiple image upload with a product-style zoom</li>
+    </ul>
+  </section>
+
+  <section class="card panel">
+    <div class="card-body">
+      <h2>Sign in</h2>
+      <p class="muted text-sm">Use one of the demo accounts below to explore each role.</p>
+
+      @if (errorMessage()) {
+        <div class="alert alert-error" role="alert">
+          <svg lucideShieldAlert size="18"></svg>
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="field">
+          <label for="email">Email address</label>
+          <div class="control">
+            <svg lucideMail size="16" class="control-icon" aria-hidden="true"></svg>
+            <input
+              id="email"
+              class="input"
+              type="email"
+              autocomplete="username"
+              placeholder="you@example.com"
+              formControlName="email"
+              [class.is-invalid]="isInvalid('email')"
+            />
+          </div>
+          @if (isInvalid('email')) {
+            <p class="field-error">
+              {{ form.controls.email.hasError('required') ? 'Email is required.' : 'Enter a valid email address.' }}
+            </p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="control">
+            <svg lucideLock size="16" class="control-icon" aria-hidden="true"></svg>
+            <input
+              id="password"
+              class="input"
+              [type]="showPassword() ? 'text' : 'password'"
+              autocomplete="current-password"
+              placeholder="Your password"
+              formControlName="password"
+              [class.is-invalid]="isInvalid('password')"
+            />
+            <button
+              type="button"
+              class="reveal"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+              (click)="showPassword.set(!showPassword())"
+            >
+              @if (showPassword()) {
+                <svg lucideEyeOff size="16"></svg>
+              } @else {
+                <svg lucideEye size="16"></svg>
+              }
+            </button>
+          </div>
+          @if (isInvalid('password')) {
+            <p class="field-error">
+              {{
+                form.controls.password.hasError('required')
+                  ? 'Password is required.'
+                  : 'Password must be at least 6 characters.'
+              }}
+            </p>
+          }
+        </div>
+
+        <app-ui-button type="submit" [block]="true" [loading]="submitting()">
+          {{ submitting() ? 'Signing in…' : 'Sign in' }}
+        </app-ui-button>
+      </form>
+
+      <div class="demo">
+        <p class="demo-title">Demo accounts</p>
+        @for (account of demoAccounts; track account.email) {
+          <button type="button" class="demo-account" (click)="useAccount(account)">
+            <span class="demo-role">{{ account.role }}</span>
+            <span class="muted text-sm truncate">{{ account.email }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+</div>

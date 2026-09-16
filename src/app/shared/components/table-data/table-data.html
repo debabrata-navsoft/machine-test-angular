@@ -1,1 +1,69 @@
-<p>table-data works!</p>
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        @for (column of columns(); track column.key) {
+          <th [style.width]="column.width" [class]="'align-' + (column.align ?? 'left')">
+            @if (column.sortable) {
+              <button
+                type="button"
+                class="sort"
+                [attr.aria-label]="'Sort by ' + column.label"
+                (click)="toggleSort(column)"
+              >
+                {{ column.label }}
+                @switch (sortState(column.key)) {
+                  @case ('asc') {
+                    <svg lucideArrowUp class="indicator is-active" size="13"></svg>
+                  }
+                  @case ('desc') {
+                    <svg lucideArrowDown class="indicator is-active" size="13"></svg>
+                  }
+                  @default {
+                    <svg lucideArrowUpDown class="indicator" size="13"></svg>
+                  }
+                }
+              </button>
+            } @else {
+              {{ column.label }}
+            }
+          </th>
+        }
+        @if (rowActions()) {
+          <th class="align-right actions-head">Actions</th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of rows(); track row.id) {
+        <tr>
+          @for (column of columns(); track column.key) {
+            <td [attr.data-label]="column.label" [class]="'align-' + (column.align ?? 'left')">
+              @if (templateFor(column.key); as cell) {
+                <ng-container [ngTemplateOutlet]="cell" [ngTemplateOutletContext]="{ $implicit: row }" />
+              } @else {
+                {{ display(row, column) }}
+              }
+            </td>
+          }
+          @if (rowActions(); as actions) {
+            <td class="align-right cell-actions" data-label="Actions">
+              <ng-container [ngTemplateOutlet]="actions" [ngTemplateOutletContext]="{ $implicit: row }" />
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (loading()) {
+    <div class="overlay">
+      <app-loader label="Loading records…" />
+    </div>
+  }
+</div>
+
+@if (showEmptyState()) {
+  <app-empty-state [title]="emptyTitle()" [message]="emptyMessage()" />
+}

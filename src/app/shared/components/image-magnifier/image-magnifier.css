@@ -1,0 +1,60 @@
+.magnifier {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.stage img {
+  display: block;
+  width: 100%;
+  max-height: 460px;
+  object-fit: contain;
+  user-select: none;
+}
+
+.lens {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  margin: -60px 0 0 -60px;
+  border: 2px solid var(--primary);
+  border-radius: 6px;
+  background: rgba(59, 91, 219, 0.12);
+  pointer-events: none;
+}
+
+.zoom {
+  height: 320px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background-color: var(--surface-muted);
+  background-repeat: no-repeat;
+}
+
+.prompt {
+  align-self: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .magnifier {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .zoom {
+    height: 240px;
+  }
+}

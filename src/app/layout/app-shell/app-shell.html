@@ -1,0 +1,73 @@
+<div class="shell" [class.menu-open]="menuOpen()">
+  <header class="topbar">
+    <button type="button" class="menu-toggle" aria-label="Toggle navigation" (click)="toggleMenu()">
+      @if (menuOpen()) {
+        <svg lucideX size="20"></svg>
+      } @else {
+        <svg lucideMenu size="20"></svg>
+      }
+    </button>
+
+    <a class="brand" routerLink="/dashboard">
+      <span class="brand-mark">MT</span>
+      <span class="brand-text">Machine Test Console</span>
+    </a>
+
+    <div class="topbar-end">
+      @if (user(); as account) {
+        <div class="account">
+          <span class="account-name truncate">{{ account.name }}</span>
+          <app-badge tone="primary">{{ account.role }}</app-badge>
+        </div>
+      }
+
+      <app-ui-button variant="secondary" size="sm" (click)="logout()">
+        <svg lucideLogOut size="15"></svg>
+        <span class="logout-text">Sign out</span>
+      </app-ui-button>
+    </div>
+
+    @if (loading()) {
+      <div class="progress" role="progressbar" aria-label="Loading"></div>
+    }
+  </header>
+
+  <div class="body">
+    <aside class="sidebar" [class.is-open]="menuOpen()">
+      <nav>
+        @for (item of navItems(); track item.path) {
+          <a
+            class="nav-link"
+            [routerLink]="item.path"
+            routerLinkActive="is-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+          >
+            @switch (item.icon) {
+              @case ('dashboard') {
+                <svg lucideLayoutDashboard size="18"></svg>
+              }
+              @case ('users') {
+                <svg lucideUsers size="18"></svg>
+              }
+              @case ('gallery') {
+                <svg lucideImage size="18"></svg>
+              }
+              @case ('drive') {
+                <svg lucideHardDrive size="18"></svg>
+              }
+            }
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      </nav>
+    </aside>
+
+    @if (menuOpen()) {
+      <div class="scrim" (click)="toggleMenu()"></div>
+    }
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

@@ -1,1 +1,110 @@
-<p>home-page works!</p>
+<div class="page">
+  @if (user(); as account) {
+    <app-page-header
+      [title]="'Welcome back, ' + account.name.split(' ')[0]"
+      subtitle="Here is what this workspace looks like right now."
+    >
+      <app-badge tone="primary">{{ roleLabel() }}</app-badge>
+    </app-page-header>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-error" role="alert">
+      <span>{{ errorMessage() }}</span>
+      <button type="button" class="retry" (click)="load()">Retry</button>
+    </div>
+  }
+
+  <section class="stats">
+    @if (canSeeUsers()) {
+      <article class="card stat">
+        <div class="card-body">
+          <span class="stat-icon"><svg lucideUsers size="18"></svg></span>
+          <p class="stat-value">{{ loading() ? '—' : stats().users }}</p>
+          <p class="stat-label">Users</p>
+        </div>
+      </article>
+    }
+
+    <article class="card stat">
+      <div class="card-body">
+        <span class="stat-icon"><svg lucideImage size="18"></svg></span>
+        <p class="stat-value">{{ loading() ? '—' : stats().images }}</p>
+        <p class="stat-label">Gallery images</p>
+      </div>
+    </article>
+
+    <article class="card stat">
+      <div class="card-body">
+        <span class="stat-icon"><svg lucideHardDrive size="18"></svg></span>
+        <p class="stat-value">{{ loading() ? '—' : stats().folders }}</p>
+        <p class="stat-label">Folders</p>
+      </div>
+    </article>
+
+    <article class="card stat">
+      <div class="card-body">
+        <span class="stat-icon"><svg lucideHardDrive size="18"></svg></span>
+        <p class="stat-value">{{ loading() ? '—' : stats().files }}</p>
+        <p class="stat-label">Stored files</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="card">
+    <div class="card-body">
+      <h2 class="section-title">Jump back in</h2>
+
+      <div class="links">
+        @if (canSeeUsers()) {
+          <a class="link-card" routerLink="/users">
+            <span>
+              <strong>User management</strong>
+              <span class="muted text-sm">Search, filter and edit accounts</span>
+            </span>
+            <svg lucideChevronRight size="18"></svg>
+          </a>
+        }
+
+        <a class="link-card" routerLink="/gallery">
+          <span>
+            <strong>Image gallery</strong>
+            <span class="muted text-sm">Upload images and zoom into details</span>
+          </span>
+          <svg lucideChevronRight size="18"></svg>
+        </a>
+
+        <a class="link-card" routerLink="/drive">
+          <span>
+            <strong>Files & folders</strong>
+            <span class="muted text-sm">Organise uploads into folders</span>
+          </span>
+          <svg lucideChevronRight size="18"></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  @if (user(); as account) {
+    <section class="card">
+      <div class="card-body">
+        <h2 class="section-title">Your access</h2>
+        <p class="muted text-sm">
+          You are signed in as <strong>{{ account.email }}</strong> with the
+          <strong>{{ roleLabel() }}</strong> role.
+          @switch (account.role) {
+            @case ('admin') {
+              Administrators can manage users and every file in the workspace.
+            }
+            @case ('manager') {
+              Managers can view users and manage images and files, but cannot change accounts.
+            }
+            @default {
+              Viewers have read-only access; actions that change data are hidden or blocked.
+            }
+          }
+        </p>
+      </div>
+    </section>
+  }
+</div>

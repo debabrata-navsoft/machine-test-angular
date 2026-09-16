@@ -1,0 +1,144 @@
+<div class="page">
+  <app-page-header title="User management" subtitle="Search, filter and manage the people in this workspace.">
+    @if (canManage()) {
+      <app-ui-button (click)="openCreate()">
+        <svg lucidePlus size="16"></svg>
+        Add user
+      </app-ui-button>
+    }
+  </app-page-header>
+
+  @if (!canManage()) {
+    <div class="alert alert-info">
+      Your role can view the user list but cannot add, edit or delete records.
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-error" role="alert">
+      <span>{{ errorMessage() }}</span>
+      <button type="button" class="retry" (click)="reload()">Retry</button>
+    </div>
+  }
+
+  <section class="card">
+    <div class="card-body toolbar">
+      <app-search-input
+        placeholder="Search name, email or department…"
+        [value]="query().search"
+        (search)="onSearch($event)"
+      />
+
+      <div class="toolbar-end">
+        <select class="select filter" [value]="query().role" (change)="onRoleFilter($event)" aria-label="Filter by role">
+          <option value="">All roles</option>
+          @for (role of roles; track role) {
+            <option [value]="role">{{ roleLabels[role] }}</option>
+          }
+        </select>
+
+        <select
+          class="select filter"
+          [value]="query().status"
+          (change)="onStatusFilter($event)"
+          aria-label="Filter by status"
+        >
+          <option value="">All statuses</option>
+          @for (status of statuses; track status) {
+            <option [value]="status">{{ status }}</option>
+          }
+        </select>
+
+        @if (hasFilters()) {
+          <app-ui-button variant="ghost" size="sm" (click)="clearFilters()">Clear</app-ui-button>
+        }
+      </div>
+    </div>
+
+    <app-table-data
+      [columns]="columns"
+      [rows]="result().items"
+      [loading]="loading()"
+      [sort]="currentSort()"
+      emptyTitle="No users match your search"
+      emptyMessage="Try a different term, or clear the filters to see everyone."
+      (sortChange)="onSort($event)"
+    >
+      <ng-template appColumnTemplate="name" let-user>
+        <div class="identity">
+          <span class="avatar" aria-hidden="true">{{ user.name.charAt(0) }}</span>
+          <span class="truncate">{{ user.name }}</span>
+        </div>
+      </ng-template>
+
+      <ng-template appColumnTemplate="role" let-user>
+        <app-badge tone="primary">{{ roleLabel(user) }}</app-badge>
+      </ng-template>
+
+      <ng-template appColumnTemplate="status" let-user>
+        <app-badge [tone]="user.status === 'active' ? 'success' : 'warning'">{{ user.status }}</app-badge>
+      </ng-template>
+
+      <ng-template appColumnTemplate="createdAt" let-user>
+        {{ user.createdAt | date: 'dd MMM yyyy' }}
+      </ng-template>
+
+      <ng-template #rowActions let-user>
+        <div class="row-actions">
+          <app-ui-button variant="ghost" size="sm" (click)="openView(user)">
+            <svg lucideEye size="15"></svg>
+            <span class="visually-hidden">View {{ user.name }}</span>
+          </app-ui-button>
+
+          @if (canManage()) {
+            <app-ui-button variant="ghost" size="sm" (click)="openEdit(user)">
+              <svg lucidePencil size="15"></svg>
+              <span class="visually-hidden">Edit {{ user.name }}</span>
+            </app-ui-button>
+
+            <app-ui-button variant="ghost" size="sm" (click)="confirmDelete(user)">
+              <svg lucideTrash size="15" class="danger"></svg>
+              <span class="visually-hidden">Delete {{ user.name }}</span>
+            </app-ui-button>
+          }
+        </div>
+      </ng-template>
+    </app-table-data>
+
+    @if (result().total) {
+      <app-pagination
+        [page]="query().page"
+        [pageSize]="query().pageSize"
+        [total]="result().total"
+        [disabled]="loading()"
+        (pageChange)="onPage($event)"
+        (pageSizeChange)="onPageSize($event)"
+      />
+    }
+  </section>
+</div>
+
+@if (dialog(); as state) {
+  @switch (state.mode) {
+    @case ('view') {
+      <app-user-details [user]="state.user" (closed)="closeDialog()" />
+    }
+    @case ('edit') {
+      <app-user-form [user]="state.user" [saving]="saving()" (save)="saveUser($event)" (cancelled)="closeDialog()" />
+    }
+    @default {
+      <app-user-form [saving]="saving()" (save)="saveUser($event)" (cancelled)="closeDialog()" />
+    }
+  }
+}
+
+@if (pendingDelete(); as user) {
+  <app-confirm-dialog
+    title="Delete user"
+    [message]="'Delete ' + user.name + '? This cannot be undone.'"
+    confirmLabel="Delete"
+    [loading]="deleting()"
+    (confirmed)="deleteUser()"
+    (cancelled)="pendingDelete.set(null)"
+  />
+}

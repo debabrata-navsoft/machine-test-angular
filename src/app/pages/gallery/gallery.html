@@ -1,0 +1,159 @@
+<div class="page">
+  <app-page-header title="Image gallery" subtitle="Upload multiple images, preview them before sending, then zoom in.">
+    @if (images().length) {
+      <span class="badge">{{ images().length }} image(s)</span>
+    }
+  </app-page-header>
+
+  @if (!canUpload()) {
+    <div class="alert alert-info">Your role can view the gallery but cannot upload or delete images.</div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-error" role="alert">
+      <span>{{ errorMessage() }}</span>
+      <button type="button" class="retry" (click)="load()">Retry</button>
+    </div>
+  }
+
+  @if (canUpload()) {
+    <section class="card">
+      <div class="card-body">
+        <app-file-drop-zone
+          title="Drag images here"
+          [hint]="'PNG, JPEG, WebP or GIF · up to ' + maxUploadMb + ' MB each'"
+          [accept]="acceptedTypes"
+          [disabled]="uploading()"
+          (filesSelected)="onFilesSelected($event)"
+        />
+
+        @if (uploads().length) {
+          <div class="previews">
+            @for (item of uploads(); track item.id) {
+              <figure class="preview" [class]="'is-' + item.status">
+                <img [src]="item.previewUrl" [alt]="item.file.name" />
+
+                <figcaption>
+                  <span class="preview-name truncate" [title]="item.file.name">{{ item.file.name }}</span>
+                  <span class="muted text-sm">{{ item.file.size | fileSize }}</span>
+
+                  @switch (item.status) {
+                    @case ('uploading') {
+                      <span class="status">Uploading…</span>
+                    }
+                    @case ('success') {
+                      <span class="status ok"><svg lucideCircleCheck size="13"></svg> Uploaded</span>
+                    }
+                    @case ('error') {
+                      <span class="status bad"><svg lucideCircleAlert size="13"></svg> {{ item.error }}</span>
+                    }
+                    @default {
+                      <span class="status">Ready</span>
+                    }
+                  }
+                </figcaption>
+
+                @if (item.status !== 'uploading') {
+                  <button type="button" class="remove" aria-label="Remove file" (click)="removeUpload(item.id)">
+                    <svg lucideX size="14"></svg>
+                  </button>
+                }
+              </figure>
+            }
+          </div>
+
+          <div class="upload-actions">
+            <p class="muted text-sm">
+              {{ readyToUpload().length }} ready · {{ rejected().length }} rejected
+            </p>
+
+            <div class="toolbar-end">
+              <app-ui-button variant="ghost" size="sm" [disabled]="uploading()" (click)="clearUploads()">
+                Clear list
+              </app-ui-button>
+
+              <app-ui-button
+                size="sm"
+                [loading]="uploading()"
+                [disabled]="!readyToUpload().length"
+                (click)="uploadAll()"
+              >
+                <svg lucideUpload size="15"></svg>
+                Upload {{ readyToUpload().length || '' }}
+              </app-ui-button>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  @if (loading()) {
+    <section class="card"><app-loader label="Loading gallery…" /></section>
+  } @else if (!images().length) {
+    <section class="card">
+      <app-empty-state
+        title="No images yet"
+        message="Uploaded images appear here, with a product-style zoom for the selected one."
+      >
+        <svg lucideImage size="30" emptyIcon></svg>
+      </app-empty-state>
+    </section>
+  } @else {
+    @if (selected(); as image) {
+      <section class="card viewer">
+        <div class="card-body">
+          <app-image-magnifier [src]="image.dataUrl" [alt]="image.name" />
+
+          <div class="viewer-meta">
+            <div class="truncate">
+              <p class="viewer-name truncate">{{ image.name }}</p>
+              <p class="muted text-sm">
+                {{ image.size | fileSize }} · uploaded by {{ image.uploadedBy }}
+              </p>
+            </div>
+
+            @if (canUpload()) {
+              <app-ui-button variant="secondary" size="sm" (click)="confirmDelete(image)">
+                <svg lucideTrash size="15"></svg>
+                Delete
+              </app-ui-button>
+            }
+          </div>
+        </div>
+      </section>
+    }
+
+    <section class="card">
+      <div class="card-body">
+        <h2 class="section-title">All images</h2>
+
+        <div class="grid">
+          @for (image of images(); track image.id) {
+            <button
+              type="button"
+              class="thumb"
+              [class.is-selected]="selected()?.id === image.id"
+              [attr.aria-pressed]="selected()?.id === image.id"
+              (click)="select(image)"
+            >
+              <img [src]="image.dataUrl" [alt]="image.name" loading="lazy" />
+              <span class="thumb-name truncate">{{ image.name }}</span>
+            </button>
+          }
+        </div>
+      </div>
+    </section>
+  }
+</div>
+
+@if (pendingDelete(); as image) {
+  <app-confirm-dialog
+    title="Delete image"
+    [message]="'Delete ' + image.name + '? This removes it from the gallery.'"
+    confirmLabel="Delete"
+    [loading]="deleting()"
+    (confirmed)="deleteImage()"
+    (cancelled)="pendingDelete.set(null)"
+  />
+}

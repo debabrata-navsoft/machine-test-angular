@@ -1,19 +1,482 @@
 {
-  "posts": [
+  "users": [
     {
       "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
+      "name": "Asha Admin",
+      "email": "admin@demo.com",
+      "password": "Admin@123",
+      "role": "admin",
+      "phone": "+91 98200 10001",
+      "department": "Engineering",
+      "status": "active",
+      "createdAt": "2026-01-02T09:00:00.000Z"
+    },
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "id": 2,
+      "name": "Manav Manager",
+      "email": "manager@demo.com",
+      "password": "Manager@123",
+      "role": "manager",
+      "phone": "+91 98200 10002",
+      "department": "Sales",
+      "status": "active",
+      "createdAt": "2026-01-03T09:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Vidya Viewer",
+      "email": "viewer@demo.com",
+      "password": "Viewer@123",
+      "role": "viewer",
+      "phone": "+91 98200 10003",
+      "department": "Support",
+      "status": "active",
+      "createdAt": "2026-01-04T09:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "name": "Aarav Verma",
+      "email": "aarav.verma4@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200053828",
+      "department": "Engineering",
+      "status": "inactive",
+      "createdAt": "2026-02-01T10:30:00.000Z"
+    },
+    {
+      "id": 5,
+      "name": "Diya Patel",
+      "email": "diya.patel5@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200067285",
+      "department": "Sales",
+      "status": "active",
+      "createdAt": "2026-02-02T10:30:00.000Z"
+    },
+    {
+      "id": 6,
+      "name": "Rohan Bose",
+      "email": "rohan.bose6@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200080742",
+      "department": "Finance",
+      "status": "active",
+      "createdAt": "2026-02-03T10:30:00.000Z"
+    },
+    {
+      "id": 7,
+      "name": "Meera Chopra",
+      "email": "meera.chopra7@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200094199",
+      "department": "Design",
+      "status": "active",
+      "createdAt": "2026-02-04T10:30:00.000Z"
+    },
+    {
+      "id": 8,
+      "name": "Kabir Banerjee",
+      "email": "kabir.banerjee8@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200107656",
+      "department": "Support",
+      "status": "active",
+      "createdAt": "2026-02-05T10:30:00.000Z"
+    },
+    {
+      "id": 9,
+      "name": "Ananya Pillai",
+      "email": "ananya.pillai9@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200121113",
+      "department": "Engineering",
+      "status": "active",
+      "createdAt": "2026-02-06T10:30:00.000Z"
+    },
+    {
+      "id": 10,
+      "name": "Ishaan Dutta",
+      "email": "ishaan.dutta10@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200134570",
+      "department": "Sales",
+      "status": "active",
+      "createdAt": "2026-02-07T10:30:00.000Z"
+    },
+    {
+      "id": 11,
+      "name": "Nisha Nair",
+      "email": "nisha.nair11@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200148027",
+      "department": "Finance",
+      "status": "inactive",
+      "createdAt": "2026-02-08T10:30:00.000Z"
+    },
+    {
+      "id": 12,
+      "name": "Arjun Reddy",
+      "email": "arjun.reddy12@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200161484",
+      "department": "Design",
+      "status": "active",
+      "createdAt": "2026-02-09T10:30:00.000Z"
+    },
+    {
+      "id": 13,
+      "name": "Priya Kulkarni",
+      "email": "priya.kulkarni13@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200174941",
+      "department": "Support",
+      "status": "active",
+      "createdAt": "2026-02-10T10:30:00.000Z"
+    },
+    {
+      "id": 14,
+      "name": "Vikram Joshi",
+      "email": "vikram.joshi14@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200188398",
+      "department": "Engineering",
+      "status": "active",
+      "createdAt": "2026-02-11T10:30:00.000Z"
+    },
+    {
+      "id": 15,
+      "name": "Sneha Ghosh",
+      "email": "sneha.ghosh15@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200201855",
+      "department": "Sales",
+      "status": "active",
+      "createdAt": "2026-02-12T10:30:00.000Z"
+    },
+    {
+      "id": 16,
+      "name": "Rahul Sinha",
+      "email": "rahul.sinha16@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200215312",
+      "department": "Finance",
+      "status": "active",
+      "createdAt": "2026-02-13T10:30:00.000Z"
+    },
+    {
+      "id": 17,
+      "name": "Tara Sharma",
+      "email": "tara.sharma17@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200228769",
+      "department": "Design",
+      "status": "active",
+      "createdAt": "2026-02-14T10:30:00.000Z"
+    },
+    {
+      "id": 18,
+      "name": "Aditya Iyer",
+      "email": "aditya.iyer18@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200242226",
+      "department": "Support",
+      "status": "inactive",
+      "createdAt": "2026-02-15T10:30:00.000Z"
+    },
+    {
+      "id": 19,
+      "name": "Kavya Das",
+      "email": "kavya.das19@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200255683",
+      "department": "Engineering",
+      "status": "active",
+      "createdAt": "2026-02-16T10:30:00.000Z"
+    },
+    {
+      "id": 20,
+      "name": "Manish Mehta",
+      "email": "manish.mehta20@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200269140",
+      "department": "Sales",
+      "status": "active",
+      "createdAt": "2026-02-17T10:30:00.000Z"
+    },
+    {
+      "id": 21,
+      "name": "Riya Rao",
+      "email": "riya.rao21@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200282597",
+      "department": "Finance",
+      "status": "active",
+      "createdAt": "2026-02-18T10:30:00.000Z"
+    },
+    {
+      "id": 22,
+      "name": "Sanjay Malhotra",
+      "email": "sanjay.malhotra22@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200296054",
+      "department": "Design",
+      "status": "active",
+      "createdAt": "2026-02-19T10:30:00.000Z"
+    },
+    {
+      "id": 23,
+      "name": "Pooja Kapoor",
+      "email": "pooja.kapoor23@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200309511",
+      "department": "Support",
+      "status": "active",
+      "createdAt": "2026-02-20T10:30:00.000Z"
+    },
+    {
+      "id": 24,
+      "name": "Dev Verma",
+      "email": "dev.verma24@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200322968",
+      "department": "Engineering",
+      "status": "active",
+      "createdAt": "2026-02-21T10:30:00.000Z"
+    },
+    {
+      "id": 25,
+      "name": "Lakshmi Patel",
+      "email": "lakshmi.patel25@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200336425",
+      "department": "Sales",
+      "status": "inactive",
+      "createdAt": "2026-02-22T10:30:00.000Z"
+    },
+    {
+      "id": 26,
+      "name": "Nikhil Bose",
+      "email": "nikhil.bose26@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200349882",
+      "department": "Finance",
+      "status": "active",
+      "createdAt": "2026-02-23T10:30:00.000Z"
+    },
+    {
+      "id": 27,
+      "name": "Anjali Chopra",
+      "email": "anjali.chopra27@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200363339",
+      "department": "Design",
+      "status": "active",
+      "createdAt": "2026-02-24T10:30:00.000Z"
+    },
+    {
+      "id": 28,
+      "name": "Varun Banerjee",
+      "email": "varun.banerjee28@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200376796",
+      "department": "Support",
+      "status": "active",
+      "createdAt": "2026-02-25T10:30:00.000Z"
+    },
+    {
+      "id": 29,
+      "name": "Shreya Pillai",
+      "email": "shreya.pillai29@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200390253",
+      "department": "Engineering",
+      "status": "active",
+      "createdAt": "2026-02-26T10:30:00.000Z"
+    },
+    {
+      "id": 30,
+      "name": "Karan Dutta",
+      "email": "karan.dutta30@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200403710",
+      "department": "Sales",
+      "status": "active",
+      "createdAt": "2026-02-27T10:30:00.000Z"
+    },
+    {
+      "id": 31,
+      "name": "Neha Nair",
+      "email": "neha.nair31@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200417167",
+      "department": "Finance",
+      "status": "active",
+      "createdAt": "2026-02-01T10:30:00.000Z"
+    },
+    {
+      "id": 32,
+      "name": "Yash Reddy",
+      "email": "yash.reddy32@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200430624",
+      "department": "Design",
+      "status": "inactive",
+      "createdAt": "2026-02-02T10:30:00.000Z"
+    },
+    {
+      "id": 33,
+      "name": "Divya Kulkarni",
+      "email": "divya.kulkarni33@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200444081",
+      "department": "Support",
+      "status": "active",
+      "createdAt": "2026-02-03T10:30:00.000Z"
+    },
+    {
+      "id": 34,
+      "name": "Aryan Joshi",
+      "email": "aryan.joshi34@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200457538",
+      "department": "Engineering",
+      "status": "active",
+      "createdAt": "2026-02-04T10:30:00.000Z"
+    },
+    {
+      "id": 35,
+      "name": "Ritu Ghosh",
+      "email": "ritu.ghosh35@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200470995",
+      "department": "Sales",
+      "status": "active",
+      "createdAt": "2026-02-05T10:30:00.000Z"
+    },
+    {
+      "id": 36,
+      "name": "Gaurav Sinha",
+      "email": "gaurav.sinha36@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200484452",
+      "department": "Finance",
+      "status": "active",
+      "createdAt": "2026-02-06T10:30:00.000Z"
+    },
+    {
+      "id": 37,
+      "name": "Swati Sharma",
+      "email": "swati.sharma37@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200497909",
+      "department": "Design",
+      "status": "active",
+      "createdAt": "2026-02-07T10:30:00.000Z"
+    },
+    {
+      "id": 38,
+      "name": "Harsh Iyer",
+      "email": "harsh.iyer38@demo.com",
+      "password": "Demo@123",
+      "role": "manager",
+      "phone": "+91 9200511366",
+      "department": "Support",
+      "status": "active",
+      "createdAt": "2026-02-08T10:30:00.000Z"
+    },
+    {
+      "id": 39,
+      "name": "Bhavna Das",
+      "email": "bhavna.das39@demo.com",
+      "password": "Demo@123",
+      "role": "viewer",
+      "phone": "+91 9200524823",
+      "department": "Engineering",
+      "status": "inactive",
+      "createdAt": "2026-02-09T10:30:00.000Z"
+    },
+    {
+      "id": 40,
+      "name": "Ajay Mehta",
+      "email": "ajay.mehta40@demo.com",
+      "password": "Demo@123",
+      "role": "admin",
+      "phone": "+91 9200538280",
+      "department": "Design",
+      "status": "active",
+      "createdAt": "2026-02-10T10:30:00.000Z"
     }
   ],
-  "profile": {
-    "name": "typicode"
-  }
+  "images": [],
+  "nodes": [
+    {
+      "id": "n-projects",
+      "name": "Projects",
+      "type": "folder",
+      "parentId": "root",
+      "createdAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "n-invoices",
+      "name": "Invoices",
+      "type": "folder",
+      "parentId": "root",
+      "createdAt": "2026-02-02T08:00:00.000Z"
+    },
+    {
+      "id": "n-invoices-2026",
+      "name": "2026",
+      "type": "folder",
+      "parentId": "n-invoices",
+      "createdAt": "2026-02-03T08:00:00.000Z"
+    },
+    {
+      "id": "n-brand",
+      "name": "Brand assets",
+      "type": "folder",
+      "parentId": "n-projects",
+      "createdAt": "2026-02-04T08:00:00.000Z"
+    },
+    {
+      "id": "229827d4-19ba-491d-aa47-0751d5ac00b7",
+      "name": "New Test",
+      "type": "folder",
+      "parentId": "root",
+      "createdAt": "2026-09-16T14:40:17.697Z"
+    }
+  ]
 }

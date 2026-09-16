@@ -1,0 +1,92 @@
+<app-modal
+  [title]="isEdit() ? 'Edit user' : 'Add user'"
+  [busy]="saving()"
+  (closed)="cancelled.emit()"
+>
+  <form id="user-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="form-grid">
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" class="input" type="text" formControlName="name" [class.is-invalid]="isInvalid('name')" />
+        @if (isInvalid('name')) {
+          <p class="field-error">
+            {{ form.controls.name.hasError('required') ? 'Name is required.' : 'Use between 3 and 60 characters.' }}
+          </p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="email">Email address</label>
+        <input
+          id="email"
+          class="input"
+          type="email"
+          formControlName="email"
+          [class.is-invalid]="isInvalid('email')"
+        />
+        @if (form.controls.email.pending) {
+          <p class="field-hint">Checking availability…</p>
+        } @else if (isInvalid('email')) {
+          <p class="field-error">
+            @if (form.controls.email.hasError('required')) {
+              Email is required.
+            } @else if (form.controls.email.hasError('email')) {
+              Enter a valid email address.
+            } @else {
+              This email is already registered.
+            }
+          </p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone</label>
+        <input id="phone" class="input" type="tel" formControlName="phone" [class.is-invalid]="isInvalid('phone')" />
+        @if (isInvalid('phone')) {
+          <p class="field-error">Enter a valid phone number.</p>
+        } @else {
+          <p class="field-hint">Optional. Digits, spaces and + - ( ) only.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="department">Department</label>
+        <select id="department" class="select" formControlName="department">
+          @for (department of departments; track department) {
+            <option [value]="department">{{ department }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="role">Role</label>
+        <select id="role" class="select" formControlName="role">
+          @for (role of roles; track role) {
+            <option [value]="role">{{ role }}</option>
+          }
+        </select>
+        <p class="field-hint">Administrators manage users; viewers get read-only access.</p>
+      </div>
+
+      <div class="field">
+        <label for="status">Status</label>
+        <select id="status" class="select" formControlName="status">
+          @for (status of statuses; track status) {
+            <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    @if (!isEdit()) {
+      <p class="field-hint">New accounts get the temporary password <strong>Demo@123</strong>.</p>
+    }
+  </form>
+
+  <div modalFooter>
+    <app-ui-button variant="secondary" [disabled]="saving()" (click)="cancelled.emit()">Cancel</app-ui-button>
+    <app-ui-button [loading]="saving()" (click)="submit()">
+      {{ isEdit() ? 'Save changes' : 'Create user' }}
+    </app-ui-button>
+  </div>
+</app-modal>
